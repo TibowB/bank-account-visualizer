@@ -1,2 +1,2 @@
 # bank-account-visualizer
-Visualizer your bank account transactions from ofx files
+Visualize your bank account transactions from ofx files
