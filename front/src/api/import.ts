@@ -1,13 +1,22 @@
 import { client } from "./client";
+import { AccountDTO } from "./dtos/accountDTO";
 
-export async function importFile(file: File): Promise<any> {
+interface OFXData {
+  account: AccountDTO;
+}
+
+export async function importFile(file: File): Promise<OFXData> {
   const formData = new FormData();
 
   formData.append("file", file);
 
-  await client.post("/uploadfile", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return client
+    .post("/uploadfile", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((data) => {
+      return data.data;
+    });
 }

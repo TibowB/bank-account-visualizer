@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { importFile } from "./api/import";
 const fileInput = ref<HTMLInputElement>();
+const account = ref<string>("");
 
 const handleImportFile = async () => {
   if (fileInput.value === undefined || fileInput.value.files === null) {
@@ -10,7 +11,9 @@ const handleImportFile = async () => {
 
   const file = fileInput.value.files[0];
 
-  await importFile(file);
+  importFile(file).then((data) => {
+    account.value = `Account : ${data.account.account_id} ${data.account.routing_number} ${data.account.branch_id}`;
+  });
 };
 </script>
 
@@ -19,5 +22,6 @@ const handleImportFile = async () => {
     <label for="file">Import File</label>
     <input ref="fileInput" type="file" name="file" />
     <button @click="handleImportFile">Import</button>
+    <p>{{ account }}</p>
   </article>
 </template>
