@@ -1,6 +1,5 @@
 from fastapi import FastAPI, UploadFile
-from account import Account
-from statement import Statement
+from models import Account, Statement, Transaction
 from ofxparse import OfxParser
 import uvicorn
 
@@ -18,7 +17,13 @@ async def create_upload_file(file: UploadFile):
 
     statement = Statement(account.statement)
 
-    return {"account": account, "statement": statement}
+    transactions: list[Transaction] = list()
+
+    for transaction in statement.transactions:
+        trn = Transaction(transaction)
+        transactions.append(trn)
+
+    return {"account": account, "statement": statement, "transactions": transactions}
 
 if __name__ == '__main__':
     uvicorn.run("app:app", host="127.0.0.1", port=5000, reload=True)
