@@ -4,18 +4,25 @@ import { importFile } from "../api/import";
 const fileInput = ref<HTMLInputElement>();
 const account = ref<string>("");
 const statement = ref<string>("");
+const isLoading = ref<boolean>(false);
 
 const handleImportFile = async () => {
   if (fileInput.value === undefined || fileInput.value.files === null) {
     return;
   }
 
+  isLoading.value = true;
+
   const file = fileInput.value.files[0];
 
-  importFile(file).then((data) => {
-    account.value = `Account : ${data.account.account_id} ${data.account.routing_number} ${data.account.branch_id}`;
-    statement.value = `Statement : ${data.statement.start_date} ${data.statement.end_date} ${data.statement.balance}`;
-  });
+  importFile(file)
+    .then((data) => {
+      account.value = `Account : ${data.account.account_id} ${data.account.routing_number} ${data.account.branch_id}`;
+      statement.value = `Statement : ${data.statement.start_date} ${data.statement.end_date} ${data.statement.balance}`;
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
 };
 </script>
 
@@ -23,7 +30,7 @@ const handleImportFile = async () => {
   <article>
     <label for="file">Import File</label>
     <input ref="fileInput" type="file" name="file" />
-    <button @click="handleImportFile">Import</button>
+    <button @click="handleImportFile" :aria-busy="isLoading">Import</button>
     <p>{{ account }}</p>
     <p>{{ statement }}</p>
   </article>
