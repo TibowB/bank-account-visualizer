@@ -1,29 +1,15 @@
-from fastapi import FastAPI, UploadFile
-from models import Account, Statement, Transaction
-from ofxparse import OfxParser
+from fastapi import FastAPI
+from security import add_cors_midddleware
 import uvicorn
 
-from security.cors import add_cors_midddleware
 
 app = FastAPI()
 
+# SECURITY
 add_cors_midddleware(app)
 
-@app.post("/uploadfile")
-async def create_upload_file(file: UploadFile):
-    ofx = OfxParser.parse(file.file)
-
-    account = Account(ofx.account)
-
-    statement = Statement(account.statement)
-
-    transactions: list[Transaction] = list()
-
-    for transaction in statement.transactions:
-        trn = Transaction(transaction)
-        transactions.append(trn)
-
-    return {"account": account, "statement": statement, "transactions": transactions}
+# CONTROLLERS
+from controllers.import_controller import *
 
 if __name__ == '__main__':
     uvicorn.run("app:app", host="127.0.0.1", port=5000, reload=True)
