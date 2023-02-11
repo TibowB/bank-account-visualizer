@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile
-from pydantic import BaseModel
 from account import Account
+from statement import Statement
 from ofxparse import OfxParser
 import uvicorn
 
@@ -16,7 +16,9 @@ async def create_upload_file(file: UploadFile):
 
     account = Account(ofx.account)
 
-    return {"account": account}
+    statement = Statement(account.statement)
+
+    return {"account": account, "statement": statement}
 
 if __name__ == '__main__':
     uvicorn.run("app:app", host="127.0.0.1", port=5000, reload=True)
