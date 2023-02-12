@@ -1,12 +1,13 @@
 <template>
   <nav>
     <ul>
-      <li><strong>Bank OFX Visualizer</strong></li>
+      <li>
+        <strong><router-link to="/">Bank OFX Visualizer</router-link></strong>
+      </li>
     </ul>
     <ul>
-      <li><a href="#">Accounts</a></li>
-      <li><a href="#">Link</a></li>
-      <li><a href="#" role="button">Import</a></li>
+      <li><router-link to="/account">Accounts</router-link></li>
+      <li><router-link to="/import" role="button">Import</router-link></li>
     </ul>
   </nav>
 </template>
