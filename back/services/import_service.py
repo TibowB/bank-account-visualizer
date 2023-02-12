@@ -1,7 +1,7 @@
 from ofxparse import OfxParser
 from fastapi import UploadFile
 
-from models import Account, Statement, Transaction
+from entities import Account, Statement, Transaction
 
 class ImportService:
 
