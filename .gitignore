@@ -1,6 +1,7 @@
 # BACK
 **/venv
 **/__pycache__
+*.db
 
 
 # FRONT
