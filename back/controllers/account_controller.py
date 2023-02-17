@@ -2,7 +2,7 @@ from app import app
 from entities import Account
 from dtos import AccountDto
 from services import AccountService
-from typing import List
+
 
 account_service = AccountService(Account)
 
