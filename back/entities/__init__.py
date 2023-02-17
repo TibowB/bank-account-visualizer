@@ -2,18 +2,15 @@ from .statement import *
 from .transaction import *
 import datetime
 
-from peewee import Model, CharField, AutoField, SqliteDatabase, DateTimeField, FloatField, ForeignKeyField
+from peewee import Model, CharField, AutoField, SqliteDatabase, DateTimeField, FloatField, ForeignKeyField, IntegerField
 
 db = SqliteDatabase('bov.db')
 
 def init_db():
     db.close()
     db.connect()
-    db.drop_tables([Account,Statement])
-    db.create_tables([Account,Statement])
-    Account.create(account_id="HELLO", routing_number="123", branch_id="456")
-    account = Account.get_by_id(1)
-    Statement.create(start_date=datetime.datetime.now(),end_date=datetime.datetime.now(), balance=100.0,available_balance=100.0,account=account)
+    db.drop_tables([Account,Statement, Transaction])
+    db.create_tables([Account,Statement, Transaction])
 
 class Account(Model):
     id = AutoField()
@@ -31,6 +28,18 @@ class Statement(Model):
     balance = FloatField()
     available_balance = FloatField()
     account = ForeignKeyField(Account, backref='statements')
+
+    class Meta:
+        database = db
+
+class Transaction(Model):
+    id = AutoField()
+    payee = CharField()
+    type = CharField()
+    date = DateTimeField()
+    amount = FloatField()
+    tid = CharField()   
+    statement = ForeignKeyField(Statement, backref='transactions')
 
     class Meta:
         database = db
