@@ -1,8 +1,6 @@
-from .statement import *
-from .transaction import *
 import datetime
 
-from peewee import Model, CharField, AutoField, SqliteDatabase, DateTimeField, FloatField, ForeignKeyField, IntegerField
+from peewee import Model, CharField, AutoField, SqliteDatabase, DateTimeField, FloatField, ForeignKeyField
 
 db = SqliteDatabase('bov.db')
 
