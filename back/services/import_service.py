@@ -23,7 +23,7 @@ class ImportService:
 
             return JSONResponse(content="Import successful!", status_code=200)
         except:
-            return JSONResponse(content="Something wrong happened!", status_code=500)
+            return JSONResponse(content="Something wrong happened!", status_code=200)
 
     def save_account_from_ofx(self, ofx):
         account = ofx.account
