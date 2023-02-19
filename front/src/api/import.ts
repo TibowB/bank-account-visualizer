@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { client } from "./client";
 
 export async function importFile(file: File): Promise<string> {
@@ -13,5 +14,8 @@ export async function importFile(file: File): Promise<string> {
     })
     .then((data) => {
       return data.data;
+    })
+    .catch((error: AxiosError) => {
+      return error.response?.data;
     });
 }
