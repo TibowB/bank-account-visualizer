@@ -2,8 +2,7 @@
 import { ref } from "vue";
 import { importFile } from "../api/import";
 const fileInput = ref<HTMLInputElement>();
-const account = ref<string>("");
-const statement = ref<string>("");
+const message = ref<string>("");
 const isLoading = ref<boolean>(false);
 
 const handleImportFile = async () => {
@@ -17,8 +16,8 @@ const handleImportFile = async () => {
 
   importFile(file)
     .then((data) => {
-      account.value = `Account : ${data.account.account_id} ${data.account.routing_number} ${data.account.branch_id}`;
-      statement.value = `Statement : ${data.statement.start_date} ${data.statement.end_date} ${data.statement.balance}`;
+      message.value = data;
+      setTimeout(() => (message.value = ""), 3000);
     })
     .finally(() => {
       isLoading.value = false;
@@ -31,7 +30,6 @@ const handleImportFile = async () => {
     <label for="file">Import File</label>
     <input ref="fileInput" type="file" name="file" />
     <button @click="handleImportFile" :aria-busy="isLoading">Import</button>
-    <p>{{ account }}</p>
-    <p>{{ statement }}</p>
+    <p>{{ message }}</p>
   </article>
 </template>

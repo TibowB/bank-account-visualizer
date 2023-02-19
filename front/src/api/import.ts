@@ -1,13 +1,6 @@
 import { client } from "./client";
-import { AccountDTO } from "./dtos/accountDTO";
-import { StatementDTO } from "./dtos/statementDTO";
 
-interface OFXData {
-  account: AccountDTO;
-  statement: StatementDTO;
-}
-
-export async function importFile(file: File): Promise<OFXData> {
+export async function importFile(file: File): Promise<string> {
   const formData = new FormData();
 
   formData.append("file", file);

@@ -1,7 +1,7 @@
 from ofxparse import OfxParser
 from fastapi import UploadFile
+from fastapi.responses import JSONResponse
 from dtos import AccountDto
-from typing import List
 from entities import Account, Statement, Transaction
 
 class ImportService:
@@ -11,26 +11,30 @@ class ImportService:
 
 
     def import_ofx_file(self, file: UploadFile):
-        ofx = self.ofx_parser.parse(file)
 
-        account = self.save_account_from_ofx(ofx)
+        try:
+            ofx = self.ofx_parser.parse(file)
 
-        statement = self.save_statement_from_ofx(ofx, account)
+            account = self.save_account_from_ofx(ofx)
 
-        self.save_transactions_from_ofx(ofx, statement)
-            
-        return {"account": account.__data__, "statement": statement.__data__}
+            statement = self.save_statement_from_ofx(ofx, account)
+
+            self.save_transactions_from_ofx(ofx, statement)
+
+            return JSONResponse(content="Import successful!", status_code=200)
+        except:
+            return JSONResponse(content="Something wrong happened!", status_code=500)
 
     def save_account_from_ofx(self, ofx):
         account = ofx.account
-        Account.create(
+        return Account.create(
             account_id=account.account_id, 
             routing_number=account.routing_number, 
             branch_id=account.branch_id)
 
     def save_statement_from_ofx(self, ofx, account: Account):
         statement = ofx.account.statement
-        Statement.create(
+        return Statement.create(
             start_date=statement.start_date,
             end_date=statement.end_date,
             balance=statement.balance,
